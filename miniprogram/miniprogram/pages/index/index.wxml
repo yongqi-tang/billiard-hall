@@ -1,0 +1,39 @@
+<view class="container">
+  <!-- 顶部品牌区 -->
+  <view class="header">
+    <view class="title">🎱 自主台球厅</view>
+    <view class="subtitle">扫码开台 · 自助计时 · 自动结账</view>
+  </view>
+
+  <!-- 扫码开台入口 -->
+  <view class="scan-entry" bindtap="goScan">
+    <view class="scan-icon">📷</view>
+    <view class="scan-text">
+      <view class="scan-title">扫码开台</view>
+      <view class="scan-desc">扫描球台上的二维码开始计时</view>
+    </view>
+    <view class="scan-arrow">›</view>
+  </view>
+
+  <!-- 球台列表 -->
+  <view class="section-title">球台状态</view>
+  <view class="table-grid">
+    <view
+      class="table-card {{item.status === 0 ? 'free' : item.status === 1 ? 'busy' : 'other'}}"
+      wx:for="{{tables}}"
+      wx:key="id"
+    >
+      <view class="table-name">{{item.name}}</view>
+      <view class="table-price">¥{{item.priceStart}} 起步</view>
+      <view class="table-status">
+        <text class="dot"></text>
+        {{item.status === 0 ? '空闲' : item.status === 1 ? '使用中' : item.status === 2 ? '维修' : '已预约'}}
+      </view>
+    </view>
+  </view>
+
+  <!-- 空态 -->
+  <view class="empty" wx:if="{{!tables.length && !loading}}">
+    暂无球台数据，请确认后端已启动
+  </view>
+</view>

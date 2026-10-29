@@ -1,0 +1,24 @@
+# ---- Java / Maven ----
+backend/target/
+*.class
+*.jar
+!.mvn/wrapper/*.jar
+
+# ---- Node ----
+node_modules/
+npm-debug.log*
+
+# ---- IDE ----
+.idea/
+*.iml
+.vscode/
+.settings/
+.project
+.classpath
+
+# ---- OS ----
+Thumbs.db
+.DS_Store
+
+# ---- 敏感配置 ----
+# application.yml 里的数据库密码/微信密钥是本地配置，如需提交请自行决定

@@ -1,0 +1,18 @@
+<view class="container">
+  <view class="scan-card">
+    <view class="icon">🎯</view>
+    <view class="title">扫描球台二维码</view>
+    <view class="desc">
+      请扫描球台上的二维码标签<br />
+      开台后灯光自动亮起并开始计时
+    </view>
+    <button class="btn-primary scan-btn" bindtap="scanCode">开始扫码</button>
+  </view>
+
+  <!-- 扫到的球台信息（当前先展示，下单逻辑后端打通后接入） -->
+  <view class="table-info card" wx:if="{{scanResult}}">
+    <view class="info-title">扫码结果</view>
+    <view class="info-row">内容：{{scanResult}}</view>
+    <view class="tips">当前为骨架演示，开台接口接入后此页将发起开台请求</view>
+  </view>
+</view>

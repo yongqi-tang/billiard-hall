@@ -1,0 +1,20 @@
+{
+  "description": "自主台球厅小程序",
+  "packOptions": {
+    "ignore": [],
+    "include": []
+  },
+  "setting": {
+    "urlCheck": false,
+    "es6": true,
+    "enhance": true,
+    "postcss": true,
+    "minified": true,
+    "newFeature": true
+  },
+  "compileType": "miniprogram",
+  "libVersion": "3.0.0",
+  "appid": "你的AppID",
+  "projectname": "billiard-hall-miniprogram",
+  "condition": {}
+}

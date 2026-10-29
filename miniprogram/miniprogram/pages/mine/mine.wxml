@@ -1,0 +1,35 @@
+<view class="container">
+  <!-- 用户卡片 -->
+  <view class="user-card">
+    <view class="avatar">{{userInfo.nickname ? userInfo.nickname[0] : '🎱'}}</view>
+    <view class="user-info">
+      <view class="nickname">{{userInfo.nickname || '微信用户'}}</view>
+      <view class="member">会员等级：{{memberText}}</view>
+    </view>
+  </view>
+
+  <!-- 余额卡片 -->
+  <view class="balance-card">
+    <view class="balance-label">账户余额</view>
+    <view class="balance-num">¥{{balance}}</view>
+    <view class="recharge-btns">
+      <button class="recharge-btn" wx:for="{{[50, 100, 200]}}" wx:key="*this" bindtap="onRecharge" data-amount="{{item}}">充 ¥{{item}}</button>
+    </view>
+  </view>
+
+  <!-- 功能列表 -->
+  <view class="menu card">
+    <view class="menu-item" bindtap="goPlaying">
+      <text>🎱 进行中的球局</text>
+      <text class="arrow">›</text>
+    </view>
+    <view class="menu-item" bindtap="goOrders">
+      <text>📋 我的订单</text>
+      <text class="arrow">›</text>
+    </view>
+    <view class="menu-item" bindtap="goScan">
+      <text>📷 扫码开台</text>
+      <text class="arrow">›</text>
+    </view>
+  </view>
+</view>

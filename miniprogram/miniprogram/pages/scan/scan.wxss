@@ -1,0 +1,51 @@
+.container {
+  padding: 60rpx 40rpx;
+}
+
+.scan-card {
+  background: #fff;
+  border-radius: 20rpx;
+  padding: 60rpx 40rpx;
+  text-align: center;
+}
+
+.icon {
+  font-size: 90rpx;
+}
+
+.title {
+  font-size: 36rpx;
+  font-weight: bold;
+  margin-top: 20rpx;
+}
+
+.desc {
+  font-size: 26rpx;
+  color: #999;
+  line-height: 1.6;
+  margin: 20rpx 0 40rpx;
+}
+
+.scan-btn {
+  width: 100%;
+  padding: 24rpx 0;
+}
+
+/* 扫码结果 */
+.info-title {
+  font-weight: bold;
+  font-size: 30rpx;
+  margin-bottom: 16rpx;
+}
+
+.info-row {
+  font-size: 26rpx;
+  color: #666;
+  word-break: break-all;
+}
+
+.tips {
+  margin-top: 20rpx;
+  font-size: 24rpx;
+  color: #fa5151;
+}

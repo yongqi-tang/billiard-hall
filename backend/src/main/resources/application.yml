@@ -1,0 +1,46 @@
+# ===================== 自主台球厅后端配置 =====================
+server:
+  port: 8080
+
+spring:
+  application:
+    name: billiard-hall-backend
+
+  # ---- MySQL 数据库（请改成你自己的账号密码）----
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/billiard?useUnicode=true&characterEncoding=utf8&serverTimezone=Asia/Shanghai&useSSL=false&allowPublicKeyRetrieval=true
+    username: root
+    password: "0513"
+
+  # ---- Redis（先本地起一个，后续用来存计时状态）----
+  redis:
+    host: localhost
+    port: 6379
+    database: 0
+
+# ---- 业务自定义配置 ----
+billiard:
+  # 计费规则（可配置，答辩可讲这块）
+  start-price-minutes: 30        # 起步价含 30 分钟
+  start-price: 30.0              # 起步价 30 元
+  price-per-minute: 1.0          # 超过起步后每分钟 1 元
+  debt-timeout-minutes: 30       # 余额不足欠费 30 分钟后强制结账灭灯
+  # 微信登录（上线时填入真实 appid/secret，本地可先用占位）
+  wx:
+    appid: your-appid
+    secret: your-secret
+
+mybatis-plus:
+  configuration:
+    map-underscore-to-camel-case: true
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+  global-config:
+    db-config:
+      logic-delete-field: deleted
+      logic-delete-value: 1
+      logic-not-delete-value: 0
+
+logging:
+  level:
+    com.billiard.hall: debug

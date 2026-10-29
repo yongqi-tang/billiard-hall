@@ -1,0 +1,21 @@
+<view class="container">
+  <view class="card order-item" wx:for="{{orders}}" wx:key="id">
+    <view class="order-header">
+      <text class="order-no">单号：{{item.orderNo}}</text>
+      <text class="status s{{item.status}}">{{item.status === 0 ? '进行中' : item.status === 1 ? '已结账' : item.status === 2 ? '已取消' : '欠费结账'}}</text>
+    </view>
+    <view class="order-body">
+      <view>开始：{{item.startTime}}</view>
+      <view wx:if="{{item.endTime}}">结束：{{item.endTime}}</view>
+      <view>时长：{{item.durationMin}} 分钟</view>
+    </view>
+    <view class="order-footer">
+      <text class="amount">¥{{item.amount}}</text>
+    </view>
+  </view>
+
+  <view class="empty" wx:if="{{!orders.length}}">
+    <view class="empty-icon">📋</view>
+    <view class="empty-text">暂无订单记录</view>
+  </view>
+</view>

@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>自主台球厅 - 管理后台</title>
+  <script src="vue.global.prod.js"></script>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: -apple-system, "PingFang SC", "Microsoft YaHei", sans-serif; background: #f5f6fa; color: #333; }
+    .header { background: #1a1a2e; color: #fff; padding: 18px 32px; display: flex; justify-content: space-between; align-items: center; }
+    .header h1 { font-size: 20px; }
+    .logout { background: none; border: 1px solid rgba(255,255,255,.5); color: #fff; padding: 6px 16px; border-radius: 6px; cursor: pointer; }
+    .container { max-width: 1100px; margin: 24px auto; padding: 0 20px; }
+    .stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-bottom: 24px; }
+    .stat-card { background: #fff; border-radius: 12px; padding: 20px; box-shadow: 0 2px 8px rgba(0,0,0,.05); }
+    .stat-card .label { font-size: 13px; color: #999; }
+    .stat-card .value { font-size: 26px; font-weight: 700; margin-top: 8px; }
+    .panel { background: #fff; border-radius: 12px; padding: 24px; margin-bottom: 24px; box-shadow: 0 2px 8px rgba(0,0,0,.05); }
+    .panel h2 { font-size: 16px; margin-bottom: 16px; }
+    table { width: 100%; border-collapse: collapse; font-size: 14px; }
+    th, td { text-align: left; padding: 10px 12px; border-bottom: 1px solid #f0f0f0; }
+    th { color: #999; font-weight: 500; background: #fafafa; }
+    .badge { padding: 3px 10px; border-radius: 20px; font-size: 12px; }
+    .b-free { background: #d9f7e3; color: #07a04d; }
+    .b-busy { background: #ffdada; color: #e53030; }
+    .b-other { background: #fff3d6; color: #b26a00; }
+    .o-0 { background: #ffe9c8; color: #b26a00; }
+    .o-1 { background: #d9f7e3; color: #07a04d; }
+    .o-2 { background: #eee; color: #999; }
+    .o-3 { background: #ffdada; color: #e53030; }
+    .badge.o-0,.badge.o-1,.badge.o-2,.badge.o-3 { padding: 3px 10px; border-radius: 20px; font-size: 12px; }
+    .btn { padding: 6px 14px; border-radius: 6px; border: none; cursor: pointer; font-size: 13px; }
+    .btn-primary { background: #1a1a2e; color: #fff; }
+    .btn-success { background: #07c160; color: #fff; }
+    .btn-danger { background: #fa5151; color: #fff; }
+    .btn-sm { padding: 4px 10px; font-size: 12px; }
+    .form-row { display: flex; gap: 10px; margin-bottom: 14px; flex-wrap: wrap; }
+    .form-row input { flex: 1; min-width: 120px; padding: 10px 12px; border: 1px solid #ddd; border-radius: 6px; font-size: 14px; }
+    .login-wrap { max-width: 380px; margin: 120px auto; background: #fff; border-radius: 12px; padding: 40px; box-shadow: 0 4px 20px rgba(0,0,0,.08); }
+    .login-wrap h2 { text-align: center; margin-bottom: 24px; }
+    .login-wrap input { width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 6px; margin-bottom: 14px; font-size: 14px; }
+    .login-wrap button { width: 100%; padding: 12px; background: #1a1a2e; color: #fff; border: none; border-radius: 6px; font-size: 15px; cursor: pointer; }
+    .toolbar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; }
+    .tab-bar { display: flex; gap: 8px; margin-bottom: 16px; }
+    .tab { padding: 8px 20px; border-radius: 20px; background: #fff; border: 1px solid #ddd; cursor: pointer; font-size: 14px; }
+    .tab.active { background: #1a1a2e; color: #fff; border-color: #1a1a2e; }
+    .empty { color: #999; text-align: center; padding: 30px; }
+  </style>
+</head>
+<body>
+<div id="app">
+  <!-- 登录页 -->
+  <div v-if="!loggedIn" class="login-wrap">
+    <h2>🎱 台球厅管理后台</h2>
+    <input v-model="loginForm.username" placeholder="用户名" />
+    <input v-model="loginForm.password" type="password" placeholder="密码" @keyup.enter="doLogin" />
+    <button @click="doLogin">登 录</button>
+    <p style="text-align:center;font-size:12px;color:#999;margin-top:12px">默认账号 admin / admin123</p>
+  </div>
+
+  <!-- 主界面 -->
+  <div v-else>
+    <div class="header">
+      <h1>🎱 自主台球厅 · 管理后台</h1>
+      <button class="logout" @click="loggedIn=false">退出登录</button>
+    </div>
+    <div class="container">
+      <!-- 统计卡片 -->
+      <div class="stats">
+        <div class="stat-card"><div class="label">累计营收</div><div class="value">¥{{stats.totalIncome || '0.00'}}</div></div>
+        <div class="stat-card"><div class="label">今日营收</div><div class="value">¥{{stats.todayIncome || '0.00'}}</div></div>
+        <div class="stat-card"><div class="label">总订单</div><div class="value">{{stats.totalOrders || 0}}</div></div>
+        <div class="stat-card"><div class="label">进行中球局</div><div class="value">{{stats.activeOrders || 0}}</div></div>
+      </div>
+
+      <!-- Tab 切换 -->
+      <div class="tab-bar">
+        <div class="tab" :class="{active: tab==='tables'}" @click="tab='tables';loadTables()">球台管理</div>
+        <div class="tab" :class="{active: tab==='orders'}" @click="tab='orders';loadOrders()">订单管理</div>
+        <div class="tab" :class="{active: tab==='users'}" @click="tab='users';loadUsers()">用户管理</div>
+      </div>
+
+      <!-- 球台管理 -->
+      <div class="panel" v-if="tab==='tables'">
+        <div class="toolbar">
+          <h2>球台列表</h2>
+          <button class="btn btn-primary" @click="addTable">+ 新增球台</button>
+        </div>
+        <table>
+          <tr><th>ID</th><th>名称</th><th>位置</th><th>状态</th><th>起步价</th><th>小时价</th><th>操作</th></tr>
+          <tr v-for="t in tables" :key="t.id">
+            <td>{{t.id}}</td><td>{{t.name}}</td><td>{{t.location}}</td>
+            <td><span class="badge" :class="t.status===0?'b-free':t.status===1?'b-busy':'b-other'">{{statusText(t.status)}}</span></td>
+            <td>¥{{t.priceStart}}</td><td>¥{{t.priceHour}}</td>
+            <td>
+              <button class="btn btn-danger btn-sm" @click="removeTable(t.id)">删除</button>
+            </td>
+          </tr>
+        </table>
+        <div v-if="!tables.length" class="empty">暂无球台</div>
+      </div>
+
+      <!-- 订单管理 -->
+      <div class="panel" v-if="tab==='orders'">
+        <h2>订单列表</h2>
+        <table>
+          <tr><th>订单号</th><th>用户ID</th><th>球台</th><th>时长(分)</th><th>金额</th><th>状态</th><th>开始时间</th></tr>
+          <tr v-for="o in orders" :key="o.id">
+            <td>{{o.orderNo}}</td><td>{{o.userId}}</td><td>{{o.tableId}}</td>
+            <td>{{o.durationMin}}</td><td>¥{{o.amount}}</td>
+            <td><span class="badge" :class="'o-'+o.status">{{orderText(o.status)}}</span></td>
+            <td>{{o.startTime}}</td>
+          </tr>
+        </table>
+        <div v-if="!orders.length" class="empty">暂无订单</div>
+      </div>
+
+      <!-- 用户管理 -->
+      <div class="panel" v-if="tab==='users'">
+        <h2>用户列表</h2>
+        <table>
+          <tr><th>ID</th><th>昵称</th><th>余额</th><th>会员等级</th><th>注册时间</th><th>操作</th></tr>
+          <tr v-for="u in users" :key="u.id">
+            <td>{{u.id}}</td><td>{{u.nickname}}</td><td>¥{{u.balance}}</td>
+            <td>{{u.memberLevel===0?'普通':u.memberLevel===1?'白银':'黄金'}}</td>
+            <td>{{u.createTime}}</td>
+            <td><button class="btn btn-success btn-sm" @click="recharge(u)">+充值</button></td>
+          </tr>
+        </table>
+        <div v-if="!users.length" class="empty">暂无用户</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+const { createApp } = Vue
+
+createApp({
+  data() {
+    return {
+      loggedIn: false,
+      loginForm: { username: '', password: '' },
+      tab: 'tables',
+      tables: [],
+      orders: [],
+      users: [],
+      stats: {},
+      baseUrl: 'http://localhost:8080'
+    }
+  },
+  methods: {
+    async api(path, method = 'GET', body) {
+      const res = await fetch(this.baseUrl + path, {
+        method,
+        headers: { 'Content-Type': 'application/json' },
+        body: body ? JSON.stringify(body) : undefined
+      })
+      const data = await res.json()
+      if (data.code !== 0) throw new Error(data.message)
+      return data.data
+    },
+    async doLogin() {
+      try {
+        const data = await this.api('/api/admin/login', 'POST', this.loginForm)
+        this.loggedIn = true
+        this.loadStats()
+        this.loadTables()
+        alert('登录成功')
+      } catch (e) {
+        alert('登录失败：' + e.message)
+      }
+    },
+    async loadStats() {
+      try { this.stats = await this.api('/api/admin/statistics') } catch (e) { console.error(e) }
+    },
+    async loadTables() {
+      try { this.tables = await this.api('/api/table/list') } catch (e) { alert('加载失败：' + e.message) }
+    },
+    async loadOrders() {
+      try { this.orders = await this.api('/api/admin/order/list') } catch (e) { alert('加载失败：' + e.message) }
+    },
+    async loadUsers() {
+      try { this.users = await this.api('/api/admin/user/list') } catch (e) { alert('加载失败：' + e.message) }
+    },
+    async addTable() {
+      const name = prompt('球台名称（如 A区3号台）：')
+      if (!name) return
+      const price = prompt('起步价：', '30') || '30'
+      const hour = prompt('小时价：', '30') || '30'
+      try {
+        await this.api('/api/admin/table/save', 'POST', { name, priceStart: Number(price), priceHour: Number(hour), status: 0 })
+        this.loadTables()
+      } catch (e) { alert('失败：' + e.message) }
+    },
+    async removeTable(id) {
+      if (!confirm('确认删除该球台？')) return
+      try { await this.api('/api/admin/table/' + id, 'DELETE'); this.loadTables() } catch (e) { alert('失败：' + e.message) }
+    },
+    async recharge(u) {
+      const amount = prompt('充值金额（元）：', '100')
+      if (!amount) return
+      try {
+        await this.api('/api/admin/user/recharge', 'POST', { userId: u.id, amount: Number(amount) })
+        this.loadUsers()
+      } catch (e) { alert('失败：' + e.message) }
+    },
+    statusText(s) { return s === 0 ? '空闲' : s === 1 ? '使用中' : s === 2 ? '维修' : '已预约' },
+    orderText(s) { return s === 0 ? '进行中' : s === 1 ? '已结账' : s === 2 ? '已取消' : '欠费结账' }
+  }
+}).mount('#app')
+</script>
+</body>
+</html>

@@ -1,0 +1,91 @@
+.container {
+  padding: 40rpx;
+}
+
+.timer-card {
+  background: linear-gradient(135deg, #1a1a2e, #2d2d44);
+  border-radius: 20rpx;
+  padding: 50rpx 40rpx;
+  text-align: center;
+  color: #fff;
+}
+
+.table-name {
+  font-size: 32rpx;
+  opacity: 0.8;
+}
+
+.timer {
+  margin: 30rpx 0 20rpx;
+}
+
+.time {
+  font-size: 80rpx;
+  font-weight: bold;
+  font-family: monospace;
+  letter-spacing: 4rpx;
+}
+
+.amount {
+  font-size: 28rpx;
+  opacity: 0.9;
+}
+
+.debt-tip {
+  margin-top: 20rpx;
+  background: rgba(255, 87, 87, 0.2);
+  border-radius: 10rpx;
+  padding: 12rpx;
+  font-size: 24rpx;
+  color: #ff9d9d;
+}
+
+.actions {
+  margin-top: 40rpx;
+}
+
+.actions button {
+  width: 100%;
+  margin-bottom: 20rpx;
+  border-radius: 12rpx;
+  padding: 24rpx 0;
+  font-size: 30rpx;
+}
+
+.btn-extend {
+  background: #ffc300;
+  color: #1a1a2e;
+}
+
+.btn-settle {
+  background: #07c160;
+  color: #fff;
+}
+
+.btn-cancel {
+  background: #fff;
+  color: #999;
+  border: 1rpx solid #ddd;
+}
+
+.tips {
+  margin-top: 30rpx;
+  text-align: center;
+  font-size: 24rpx;
+  color: #999;
+}
+
+.empty {
+  text-align: center;
+  padding: 120rpx 60rpx;
+}
+
+.empty-icon {
+  font-size: 100rpx;
+}
+
+.empty-text {
+  font-size: 30rpx;
+  color: #999;
+  margin: 30rpx 0 40rpx;
+}

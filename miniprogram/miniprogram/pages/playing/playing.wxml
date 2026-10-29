@@ -1,0 +1,28 @@
+<view class="container" wx:if="{{order}}">
+  <!-- 计时面板 -->
+  <view class="timer-card">
+    <view class="table-name">{{table.name}}</view>
+    <view class="timer">
+      <text class="time">{{displayTime}}</text>
+    </view>
+    <view class="amount">已消费预估：¥{{estimatedAmount}}</view>
+    <view class="debt-tip" wx:if="{{debt}}">⚠️ 余额不足，请尽快结账或充值，超时将自动结账</view>
+  </view>
+
+  <!-- 操作按钮 -->
+  <view class="actions">
+    <button class="btn-extend" bindtap="onExtend">续时（+¥{{extendPrice}}）</button>
+    <button class="btn-settle" bindtap="onSettle">结账离场</button>
+    <button class="btn-cancel" bindtap="onCancel">取消订单</button>
+  </view>
+
+  <view class="tips">
+    温馨提示：结账后球台灯将自动熄灭，请确认物品已带走
+  </view>
+</view>
+
+<view class="empty" wx:else>
+  <view class="empty-icon">🎱</view>
+  <view class="empty-text">当前没有进行中的球局</view>
+  <button class="btn-primary" bindtap="goIndex">去扫码开台</button>
+</view>
