@@ -1,0 +1,202 @@
+.container {
+  padding-bottom: 180rpx;
+}
+
+.section {
+  margin: 24rpx;
+  background: #fff;
+  border-radius: 24rpx;
+  padding: 28rpx;
+  box-shadow: 0 8rpx 24rpx rgba(26, 26, 46, 0.05);
+}
+
+.section-title {
+  font-size: 30rpx;
+  font-weight: 700;
+  color: #1f2430;
+  margin-bottom: 24rpx;
+  display: flex;
+  align-items: center;
+}
+
+.num {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 40rpx;
+  height: 40rpx;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #1a1a2e, #2d3a5f);
+  color: #fff;
+  font-size: 24rpx;
+  margin-right: 14rpx;
+  flex-shrink: 0;
+}
+
+/* 球台选择 */
+.table-scroll {
+  width: 100%;
+  white-space: nowrap;
+}
+
+.table-row {
+  display: inline-flex;
+  padding: 4rpx;
+}
+
+.table-pill {
+  display: inline-block;
+  width: 200rpx;
+  margin-right: 20rpx;
+  padding: 24rpx 20rpx;
+  border-radius: 20rpx;
+  background: #f4f6fb;
+  border: 3rpx solid transparent;
+  text-align: center;
+  transition: all 0.2s ease;
+}
+
+.table-pill.active {
+  background: linear-gradient(160deg, #1a1a2e, #2d3a5f);
+  border-color: #1a1a2e;
+  box-shadow: 0 6rpx 16rpx rgba(26, 26, 46, 0.25);
+  transform: translateY(-2rpx);
+}
+
+.table-pill.disabled {
+  opacity: 0.5;
+}
+
+.pill-name {
+  font-size: 28rpx;
+  font-weight: 600;
+  color: #1f2430;
+}
+
+.table-pill.active .pill-name {
+  color: #fff;
+}
+
+.pill-price {
+  font-size: 22rpx;
+  color: #9aa0ad;
+  margin-top: 6rpx;
+}
+
+.table-pill.active .pill-price {
+  color: rgba(255, 255, 255, 0.75);
+}
+
+.pill-status {
+  margin-top: 8rpx;
+  font-size: 20rpx;
+  color: #fa5151;
+  background: rgba(250, 81, 81, 0.1);
+  border-radius: 8rpx;
+  padding: 2rpx 10rpx;
+  display: inline-block;
+}
+
+/* 日期选择 */
+.date-row {
+  display: flex;
+}
+
+.date-pill {
+  flex: 1;
+  text-align: center;
+  padding: 20rpx 0;
+  border-radius: 16rpx;
+  background: #f4f6fb;
+  margin-right: 12rpx;
+  transition: all 0.2s ease;
+}
+
+.date-pill:last-child {
+  margin-right: 0;
+}
+
+.date-pill.active {
+  background: linear-gradient(160deg, #1a1a2e, #2d3a5f);
+  color: #fff;
+  box-shadow: 0 6rpx 14rpx rgba(26, 26, 46, 0.22);
+  transform: translateY(-2rpx);
+}
+
+.date-week {
+  font-size: 22rpx;
+  opacity: 0.7;
+}
+
+.date-label {
+  font-size: 24rpx;
+  font-weight: 600;
+  margin-top: 6rpx;
+}
+
+/* 时间段选择 */
+.slot-grid {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+}
+
+.slot {
+  width: 30%;
+  margin-bottom: 16rpx;
+  text-align: center;
+  padding: 18rpx 0;
+  font-size: 24rpx;
+  color: #555;
+  background: #f4f6fb;
+  border-radius: 12rpx;
+  transition: all 0.2s ease;
+}
+
+.slot.active {
+  background: linear-gradient(160deg, #ffb300, #ff9500);
+  color: #fff;
+  font-weight: 600;
+  box-shadow: 0 6rpx 14rpx rgba(255, 149, 0, 0.3);
+  transform: scale(1.03);
+}
+
+/* 备注 */
+.remark-input {
+  background: #f4f6fb;
+  border-radius: 14rpx;
+  padding: 20rpx 24rpx;
+  font-size: 26rpx;
+}
+
+/* 提交 */
+.submit-bar {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(255, 255, 255, 0.96);
+  padding: 20rpx 30rpx calc(20rpx + env(safe-area-inset-bottom));
+  box-shadow: 0 -6rpx 20rpx rgba(0, 0, 0, 0.06);
+}
+
+.submit-btn {
+  width: 100%;
+  padding: 26rpx 0;
+  font-size: 32rpx;
+  font-weight: 600;
+}
+
+.submit-tip {
+  text-align: center;
+  font-size: 22rpx;
+  color: #9aa0ad;
+  margin-top: 12rpx;
+}
+
+.tip {
+  font-size: 24rpx;
+  color: #9aa0ad;
+  text-align: center;
+  padding: 30rpx 0;
+}

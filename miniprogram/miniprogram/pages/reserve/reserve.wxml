@@ -1,0 +1,72 @@
+<view class="container">
+  <!-- 标题 -->
+  <view class="page-hero">
+    <view class="hero-title">📅 在线预约</view>
+    <view class="hero-subtitle">提前锁定球台 · 到店扫码即开</view>
+  </view>
+
+  <!-- 选球台 -->
+  <view class="section">
+    <view class="section-title"><text class="num">1</text> 选择球台</view>
+    <scroll-view scroll-x class="table-scroll" enhanced show-scrollbar="{{false}}">
+      <view class="table-row">
+        <view
+          wx:for="{{tables}}"
+          wx:key="id"
+          class="table-pill {{selectedTableId === item.id ? 'active' : ''}} {{item.status === 1 || item.status === 2 ? 'disabled' : ''}}"
+          data-id="{{item.id}}"
+          bindtap="selectTable"
+        >
+          <view class="pill-name">🎱 {{item.name}}</view>
+          <view class="pill-price">¥{{item.priceHour}}/小时</view>
+          <view class="pill-status" wx:if="{{item.status === 1}}">使用中</view>
+          <view class="pill-status" wx:elif="{{item.status === 2}}">维修</view>
+        </view>
+      </view>
+    </scroll-view>
+    <view class="tip" wx:if="{{!tables.length && !loading}}">暂无球台数据</view>
+  </view>
+
+  <!-- 选日期 -->
+  <view class="section">
+    <view class="section-title"><text class="num">2</text> 选择日期</view>
+    <view class="date-row">
+      <view
+        wx:for="{{dates}}"
+        wx:key="date"
+        class="date-pill {{selectedDate === item.date ? 'active' : ''}}"
+        data-date="{{item.date}}"
+        bindtap="selectDate"
+      >
+        <view class="date-week">{{item.week}}</view>
+        <view class="date-label">{{item.label}}</view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 选时间段 -->
+  <view class="section">
+    <view class="section-title"><text class="num">3</text> 选择时间段</view>
+    <view class="slot-grid">
+      <view
+        wx:for="{{slots}}"
+        wx:key="label"
+        class="slot {{selectedSlotIndex === index ? 'active' : ''}}"
+        data-index="{{index}}"
+        bindtap="selectSlot"
+      >{{item.label}}</view>
+    </view>
+  </view>
+
+  <!-- 备注 -->
+  <view class="section">
+    <view class="section-title"><text class="num">4</text> 备注（选填）</view>
+    <input class="remark-input" placeholder="如：约 3 位朋友一起打" bindinput="onRemark" value="{{remark}}" />
+  </view>
+
+  <!-- 提交 -->
+  <view class="submit-bar">
+    <button class="btn-primary submit-btn" bindtap="onSubmit">确认预约</button>
+    <view class="submit-tip">预约时段开始 30 分钟内未到店将自动释放</view>
+  </view>
+</view>

@@ -1,0 +1,28 @@
+<view class="container">
+  <view class="page-hero">
+    <view class="hero-title">📋 我的预约</view>
+    <view class="hero-subtitle">预约时段内到店扫码即可开台</view>
+  </view>
+
+  <!-- 预约列表 -->
+  <view class="res-card" wx:for="{{reservations}}" wx:key="id">
+    <view class="res-head">
+      <view class="res-table">🎱 球台 #{{item.tableId}}</view>
+      <view class="status-badge {{item.statusClass}}">{{item.statusText}}</view>
+    </view>
+    <view class="res-time">
+      <view class="date-icon">📅</view>
+      <text>{{item.dateLabel}}</text>
+    </view>
+    <view class="res-no">预约号：{{item.reservationNo}}</view>
+    <view class="res-remark" wx:if="{{item.remark}}">备注：{{item.remark}}</view>
+    <button wx:if="{{item.status === 0}}" class="cancel-btn" data-id="{{item.id}}" bindtap="onCancel">取消预约</button>
+  </view>
+
+  <!-- 空态 -->
+  <view class="empty" wx:if="{{!reservations.length && !loading}}">
+    <view class="empty-icon">🗓️</view>
+    <view class="empty-text">还没有预约记录</view>
+    <button class="btn-primary reserve-btn" bindtap="goReserve">立即预约</button>
+  </view>
+</view>

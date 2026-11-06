@@ -1,6 +1,8 @@
 {
   "pages": [
     "pages/index/index",
+    "pages/reserve/reserve",
+    "pages/reservations/reservations",
     "pages/scan/scan",
     "pages/playing/playing",
     "pages/orders/orders",
@@ -8,18 +10,23 @@
   ],
   "window": {
     "navigationBarBackgroundColor": "#1a1a2e",
-    "navigationBarTitleText": "自主台球厅",
+    "navigationBarTitleText": "台球厅预约",
     "navigationBarTextStyle": "white",
-    "backgroundColor": "#f5f5f5"
+    "backgroundColor": "#f0f2f7"
   },
   "tabBar": {
-    "color": "#999",
+    "color": "#8a8f99",
     "selectedColor": "#1a1a2e",
     "backgroundColor": "#ffffff",
+    "borderStyle": "white",
     "list": [
       {
         "pagePath": "pages/index/index",
         "text": "首页"
+      },
+      {
+        "pagePath": "pages/reservations/reservations",
+        "text": "预约"
       },
       {
         "pagePath": "pages/mine/mine",

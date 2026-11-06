@@ -3,7 +3,8 @@ const api = require('../../utils/api')
 
 Page({
   data: {
-    scanning: false
+    scanning: false,
+    hasReservation: false
   },
 
   // 调起摄像头扫码

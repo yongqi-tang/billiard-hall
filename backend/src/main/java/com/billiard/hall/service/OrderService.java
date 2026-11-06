@@ -10,11 +10,13 @@ import com.billiard.hall.entity.BilliardOrder;
 import com.billiard.hall.entity.BilliardTable;
 import com.billiard.hall.entity.Device;
 import com.billiard.hall.entity.RechargeRecord;
+import com.billiard.hall.entity.Reservation;
 import com.billiard.hall.entity.User;
 import com.billiard.hall.mapper.BilliardOrderMapper;
 import com.billiard.hall.mapper.BilliardTableMapper;
 import com.billiard.hall.mapper.DeviceMapper;
 import com.billiard.hall.mapper.RechargeRecordMapper;
+import com.billiard.hall.mapper.ReservationMapper;
 import com.billiard.hall.mapper.UserMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -45,6 +47,7 @@ public class OrderService {
     private final BilliardTableMapper tableMapper;
     private final UserMapper userMapper;
     private final RechargeRecordMapper rechargeRecordMapper;
+    private final ReservationMapper reservationMapper;
     private final DeviceMapper deviceMapper;
     private final DeviceService deviceService;
     private final BilliardProperties props;
@@ -58,7 +61,8 @@ public class OrderService {
     @Transactional(rollbackFor = Exception.class)
     public BilliardOrder open(Long userId, Long tableId) {
         BilliardTable table = getTable(tableId);
-        if (table.getStatus() != 0) {
+        // 球台可用性：空闲(0)可直接开台；预约(3)须用户有当前时段预约才允许
+        if (table.getStatus() != 0 && table.getStatus() != 3) {
             throw new BusinessException("该球台当前不可用");
         }
         // 同一用户不能同时开两台
@@ -75,6 +79,14 @@ public class OrderService {
         // 余额校验：至少够起步价
         if (user.getBalance().compareTo(props.getStartPrice()) < 0) {
             throw new BusinessException("余额不足起步价，请先充值");
+        }
+
+        // 预约核销：用户在当前球台本时段有待使用预约则自动核销（无则忽略）
+        checkinReservationIfAny(userId, tableId);
+        // 若球台仍处于预约态但用户无本时段有效预约（说明被他人预约），拒绝
+        BilliardTable fresh = tableMapper.selectById(tableId);
+        if (fresh.getStatus() == 3) {
+            throw new BusinessException("该球台已被预约，您没有本时段的有效预约");
         }
 
         // 扣起步价（先付起步，多退少补在结账时算）
@@ -282,6 +294,26 @@ public class OrderService {
     }
 
     // ================== 私有方法 ==================
+
+    /**
+     * 预约核销：查询用户在当前球台、当前时段的待使用预约，有则核销为已开台（无则忽略）
+     */
+    private void checkinReservationIfAny(Long userId, Long tableId) {
+        LocalDateTime now = LocalDateTime.now();
+        Reservation r = reservationMapper.selectOne(new LambdaQueryWrapper<Reservation>()
+                .eq(Reservation::getUserId, userId)
+                .eq(Reservation::getTableId, tableId)
+                .eq(Reservation::getReserveDate, now.toLocalDate())
+                .eq(Reservation::getStatus, 0)
+                .le(Reservation::getStartTime, now.toLocalTime())
+                .ge(Reservation::getEndTime, now.toLocalTime())
+                .last("limit 1"));
+        if (r != null) {
+            r.setStatus(1);
+            reservationMapper.updateById(r);
+            log.info("预约核销成功 reservationNo={}", r.getReservationNo());
+        }
+    }
 
     private BilliardOrder getActiveOrder(Long orderId, Long userId) {
         BilliardOrder order = orderMapper.selectById(orderId);

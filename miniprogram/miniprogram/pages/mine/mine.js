@@ -58,6 +58,14 @@ Page({
     wx.navigateTo({ url: '/pages/orders/orders' })
   },
 
+  goReservations() {
+    wx.switchTab({ url: '/pages/reservations/reservations' })
+  },
+
+  goReserve() {
+    wx.navigateTo({ url: '/pages/reserve/reserve' })
+  },
+
   goScan() {
     wx.navigateTo({ url: '/pages/scan/scan' })
   }

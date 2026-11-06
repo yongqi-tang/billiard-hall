@@ -3,25 +3,34 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>自主台球厅 - 管理后台</title>
+  <title>台球厅预约管理系统 - 管理后台</title>
   <script src="vue.global.prod.js"></script>
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
-    body { font-family: -apple-system, "PingFang SC", "Microsoft YaHei", sans-serif; background: #f5f6fa; color: #333; }
-    .header { background: #1a1a2e; color: #fff; padding: 18px 32px; display: flex; justify-content: space-between; align-items: center; }
-    .header h1 { font-size: 20px; }
-    .logout { background: none; border: 1px solid rgba(255,255,255,.5); color: #fff; padding: 6px 16px; border-radius: 6px; cursor: pointer; }
-    .container { max-width: 1100px; margin: 24px auto; padding: 0 20px; }
-    .stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-bottom: 24px; }
-    .stat-card { background: #fff; border-radius: 12px; padding: 20px; box-shadow: 0 2px 8px rgba(0,0,0,.05); }
-    .stat-card .label { font-size: 13px; color: #999; }
-    .stat-card .value { font-size: 26px; font-weight: 700; margin-top: 8px; }
-    .panel { background: #fff; border-radius: 12px; padding: 24px; margin-bottom: 24px; box-shadow: 0 2px 8px rgba(0,0,0,.05); }
+    body { font-family: -apple-system, "PingFang SC", "Microsoft YaHei", sans-serif; background: #eef1f7; color: #1f2430; }
+    .header {
+      background: linear-gradient(135deg, #14142b 0%, #1a1a2e 55%, #2d3a5f 100%);
+      color: #fff; padding: 18px 32px; display: flex; justify-content: space-between; align-items: center;
+      box-shadow: 0 2px 12px rgba(26,26,46,.2);
+    }
+    .header h1 { font-size: 20px; letter-spacing: 1px; }
+    .logout { background: rgba(255,255,255,.1); border: 1px solid rgba(255,255,255,.4); color: #fff; padding: 6px 16px; border-radius: 8px; cursor: pointer; transition: background .2s; }
+    .logout:hover { background: rgba(255,255,255,.2); }
+    .container { max-width: 1180px; margin: 24px auto; padding: 0 20px; }
+    .stats { display: grid; grid-template-columns: repeat(5, 1fr); gap: 16px; margin-bottom: 24px; }
+    .stat-card { background: #fff; border-radius: 16px; padding: 20px; box-shadow: 0 6px 20px rgba(26,26,46,.06); transition: transform .2s; }
+    .stat-card:hover { transform: translateY(-3px); }
+    .stat-card .label { font-size: 13px; color: #9aa0ad; }
+    .stat-card .value { font-size: 26px; font-weight: 800; margin-top: 8px; color: #1a1a2e; }
+    .stat-card .value.highlight { color: #e08a00; }
+    .panel { background: #fff; border-radius: 16px; padding: 24px; margin-bottom: 24px; box-shadow: 0 6px 20px rgba(26,26,46,.06); }
     .panel h2 { font-size: 16px; margin-bottom: 16px; }
     table { width: 100%; border-collapse: collapse; font-size: 14px; }
-    th, td { text-align: left; padding: 10px 12px; border-bottom: 1px solid #f0f0f0; }
-    th { color: #999; font-weight: 500; background: #fafafa; }
-    .badge { padding: 3px 10px; border-radius: 20px; font-size: 12px; }
+    th, td { text-align: left; padding: 12px 12px; border-bottom: 1px solid #f0f2f7; }
+    th { color: #9aa0ad; font-weight: 600; background: #fafbfd; }
+    tr { transition: background .15s; }
+    tbody tr:hover { background: #f8f9fc; }
+    .badge { padding: 3px 12px; border-radius: 20px; font-size: 12px; font-weight: 500; }
     .b-free { background: #d9f7e3; color: #07a04d; }
     .b-busy { background: #ffdada; color: #e53030; }
     .b-other { background: #fff3d6; color: #b26a00; }
@@ -29,22 +38,31 @@
     .o-1 { background: #d9f7e3; color: #07a04d; }
     .o-2 { background: #eee; color: #999; }
     .o-3 { background: #ffdada; color: #e53030; }
-    .badge.o-0,.badge.o-1,.badge.o-2,.badge.o-3 { padding: 3px 10px; border-radius: 20px; font-size: 12px; }
-    .btn { padding: 6px 14px; border-radius: 6px; border: none; cursor: pointer; font-size: 13px; }
-    .btn-primary { background: #1a1a2e; color: #fff; }
+    .r-0 { background: #fff4d6; color: #b26a00; }
+    .r-1 { background: #d9f7e3; color: #07a04d; }
+    .r-2 { background: #e8ebf0; color: #6b7280; }
+    .r-3 { background: #f3f4f6; color: #9aa0ad; }
+    .r-4 { background: #ffdada; color: #e53030; }
+    .btn { padding: 6px 14px; border-radius: 8px; border: none; cursor: pointer; font-size: 13px; transition: transform .15s, box-shadow .15s; }
+    .btn:active { transform: scale(.96); }
+    .btn-primary { background: linear-gradient(135deg,#1a1a2e,#2d3a5f); color: #fff; }
     .btn-success { background: #07c160; color: #fff; }
     .btn-danger { background: #fa5151; color: #fff; }
-    .btn-sm { padding: 4px 10px; font-size: 12px; }
+    .btn-sm { padding: 4px 12px; font-size: 12px; }
     .form-row { display: flex; gap: 10px; margin-bottom: 14px; flex-wrap: wrap; }
-    .form-row input { flex: 1; min-width: 120px; padding: 10px 12px; border: 1px solid #ddd; border-radius: 6px; font-size: 14px; }
-    .login-wrap { max-width: 380px; margin: 120px auto; background: #fff; border-radius: 12px; padding: 40px; box-shadow: 0 4px 20px rgba(0,0,0,.08); }
-    .login-wrap h2 { text-align: center; margin-bottom: 24px; }
-    .login-wrap input { width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 6px; margin-bottom: 14px; font-size: 14px; }
-    .login-wrap button { width: 100%; padding: 12px; background: #1a1a2e; color: #fff; border: none; border-radius: 6px; font-size: 15px; cursor: pointer; }
+    .form-row input { flex: 1; min-width: 120px; padding: 10px 12px; border: 1px solid #e0e4ec; border-radius: 8px; font-size: 14px; outline: none; transition: border-color .2s; }
+    .form-row input:focus { border-color: #1a1a2e; }
+    .login-wrap { max-width: 400px; margin: 120px auto; background: #fff; border-radius: 20px; padding: 44px; box-shadow: 0 12px 40px rgba(26,26,46,.12); }
+    .login-wrap h2 { text-align: center; margin-bottom: 28px; color: #1a1a2e; }
+    .login-wrap input { width: 100%; padding: 12px 14px; border: 1px solid #e0e4ec; border-radius: 8px; margin-bottom: 14px; font-size: 14px; outline: none; }
+    .login-wrap input:focus { border-color: #1a1a2e; }
+    .login-wrap button { width: 100%; padding: 13px; background: linear-gradient(135deg,#1a1a2e,#2d3a5f); color: #fff; border: none; border-radius: 8px; font-size: 15px; cursor: pointer; transition: opacity .2s; }
+    .login-wrap button:hover { opacity: .9; }
     .toolbar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; }
-    .tab-bar { display: flex; gap: 8px; margin-bottom: 16px; }
-    .tab { padding: 8px 20px; border-radius: 20px; background: #fff; border: 1px solid #ddd; cursor: pointer; font-size: 14px; }
-    .tab.active { background: #1a1a2e; color: #fff; border-color: #1a1a2e; }
+    .tab-bar { display: flex; gap: 8px; margin-bottom: 16px; flex-wrap: wrap; }
+    .tab { padding: 8px 22px; border-radius: 22px; background: #fff; border: 1px solid #e0e4ec; cursor: pointer; font-size: 14px; transition: all .2s; }
+    .tab:hover { border-color: #1a1a2e; }
+    .tab.active { background: linear-gradient(135deg,#1a1a2e,#2d3a5f); color: #fff; border-color: #1a1a2e; box-shadow: 0 4px 12px rgba(26,26,46,.2); }
     .empty { color: #999; text-align: center; padding: 30px; }
   </style>
 </head>
@@ -52,7 +70,7 @@
 <div id="app">
   <!-- 登录页 -->
   <div v-if="!loggedIn" class="login-wrap">
-    <h2>🎱 台球厅管理后台</h2>
+    <h2>🎱 台球厅预约管理系统</h2>
     <input v-model="loginForm.username" placeholder="用户名" />
     <input v-model="loginForm.password" type="password" placeholder="密码" @keyup.enter="doLogin" />
     <button @click="doLogin">登 录</button>
@@ -62,7 +80,7 @@
   <!-- 主界面 -->
   <div v-else>
     <div class="header">
-      <h1>🎱 自主台球厅 · 管理后台</h1>
+      <h1>🎱 台球厅预约管理系统 · 管理后台</h1>
       <button class="logout" @click="loggedIn=false">退出登录</button>
     </div>
     <div class="container">
@@ -72,13 +90,15 @@
         <div class="stat-card"><div class="label">今日营收</div><div class="value">¥{{stats.todayIncome || '0.00'}}</div></div>
         <div class="stat-card"><div class="label">总订单</div><div class="value">{{stats.totalOrders || 0}}</div></div>
         <div class="stat-card"><div class="label">进行中球局</div><div class="value">{{stats.activeOrders || 0}}</div></div>
+        <div class="stat-card"><div class="label">待使用预约</div><div class="value highlight">{{stats.pendingReservations || 0}}</div></div>
       </div>
 
       <!-- Tab 切换 -->
       <div class="tab-bar">
-        <div class="tab" :class="{active: tab==='tables'}" @click="tab='tables';loadTables()">球台管理</div>
-        <div class="tab" :class="{active: tab==='orders'}" @click="tab='orders';loadOrders()">订单管理</div>
-        <div class="tab" :class="{active: tab==='users'}" @click="tab='users';loadUsers()">用户管理</div>
+        <div class="tab" :class="{active: tab==='tables'}" @click="switchTab('tables')">球台管理</div>
+        <div class="tab" :class="{active: tab==='reservations'}" @click="switchTab('reservations')">预约管理</div>
+        <div class="tab" :class="{active: tab==='orders'}" @click="switchTab('orders')">订单管理</div>
+        <div class="tab" :class="{active: tab==='users'}" @click="switchTab('users')">用户管理</div>
       </div>
 
       <!-- 球台管理 -->
@@ -91,7 +111,10 @@
           <tr><th>ID</th><th>名称</th><th>位置</th><th>状态</th><th>起步价</th><th>小时价</th><th>操作</th></tr>
           <tr v-for="t in tables" :key="t.id">
             <td>{{t.id}}</td><td>{{t.name}}</td><td>{{t.location}}</td>
-            <td><span class="badge" :class="t.status===0?'b-free':t.status===1?'b-busy':'b-other'">{{statusText(t.status)}}</span></td>
+            <td>
+              <span class="badge" :class="t.status===0?'b-free':t.status===1?'b-busy':'b-other'">{{statusText(t.status)}}</span>
+              <span v-if="t.reservedCount" style="font-size:12px;color:#e08a00;margin-left:6px">· {{t.reservedCount}}场待预约</span>
+            </td>
             <td>¥{{t.priceStart}}</td><td>¥{{t.priceHour}}</td>
             <td>
               <button class="btn btn-danger btn-sm" @click="removeTable(t.id)">删除</button>
@@ -99,6 +122,25 @@
           </tr>
         </table>
         <div v-if="!tables.length" class="empty">暂无球台</div>
+      </div>
+
+      <!-- 预约管理 -->
+      <div class="panel" v-if="tab==='reservations'">
+        <h2>预约列表</h2>
+        <table>
+          <tr><th>预约号</th><th>用户ID</th><th>球台</th><th>日期</th><th>时间段</th><th>状态</th><th>备注</th><th>操作</th></tr>
+          <tr v-for="r in reservations" :key="r.id">
+            <td>{{r.reservationNo}}</td><td>{{r.userId}}</td><td>{{r.tableId}}</td>
+            <td>{{r.reserveDate}}</td>
+            <td>{{r.startTime.slice(0,5)}} - {{r.endTime.slice(0,5)}}</td>
+            <td><span class="badge" :class="'r-'+r.status">{{reservationText(r.status)}}</span></td>
+            <td>{{r.remark || '-'}}</td>
+            <td>
+              <button v-if="r.status===0" class="btn btn-danger btn-sm" @click="cancelReservation(r.id)">取消</button>
+            </td>
+          </tr>
+        </table>
+        <div v-if="!reservations.length" class="empty">暂无预约</div>
       </div>
 
       <!-- 订单管理 -->
@@ -144,6 +186,7 @@ createApp({
       loginForm: { username: '', password: '' },
       tab: 'tables',
       tables: [],
+      reservations: [],
       orders: [],
       users: [],
       stats: {},
@@ -163,7 +206,7 @@ createApp({
     },
     async doLogin() {
       try {
-        const data = await this.api('/api/admin/login', 'POST', this.loginForm)
+        await this.api('/api/admin/login', 'POST', this.loginForm)
         this.loggedIn = true
         this.loadStats()
         this.loadTables()
@@ -172,11 +215,21 @@ createApp({
         alert('登录失败：' + e.message)
       }
     },
+    switchTab(name) {
+      this.tab = name
+      if (name === 'tables') this.loadTables()
+      if (name === 'reservations') this.loadReservations()
+      if (name === 'orders') this.loadOrders()
+      if (name === 'users') this.loadUsers()
+    },
     async loadStats() {
       try { this.stats = await this.api('/api/admin/statistics') } catch (e) { console.error(e) }
     },
     async loadTables() {
       try { this.tables = await this.api('/api/table/list') } catch (e) { alert('加载失败：' + e.message) }
+    },
+    async loadReservations() {
+      try { this.reservations = await this.api('/api/reservation/admin/list') } catch (e) { alert('加载失败：' + e.message) }
     },
     async loadOrders() {
       try { this.orders = await this.api('/api/admin/order/list') } catch (e) { alert('加载失败：' + e.message) }
@@ -198,6 +251,14 @@ createApp({
       if (!confirm('确认删除该球台？')) return
       try { await this.api('/api/admin/table/' + id, 'DELETE'); this.loadTables() } catch (e) { alert('失败：' + e.message) }
     },
+    async cancelReservation(id) {
+      if (!confirm('确认取消该预约？')) return
+      try {
+        await this.api('/api/reservation/admin/cancel', 'POST', { reservationId: id })
+        this.loadReservations()
+        this.loadStats()
+      } catch (e) { alert('失败：' + e.message) }
+    },
     async recharge(u) {
       const amount = prompt('充值金额（元）：', '100')
       if (!amount) return
@@ -207,7 +268,8 @@ createApp({
       } catch (e) { alert('失败：' + e.message) }
     },
     statusText(s) { return s === 0 ? '空闲' : s === 1 ? '使用中' : s === 2 ? '维修' : '已预约' },
-    orderText(s) { return s === 0 ? '进行中' : s === 1 ? '已结账' : s === 2 ? '已取消' : '欠费结账' }
+    orderText(s) { return s === 0 ? '进行中' : s === 1 ? '已结账' : s === 2 ? '已取消' : '欠费结账' },
+    reservationText(s) { return s === 0 ? '待使用' : s === 1 ? '已开台' : s === 2 ? '已完成' : s === 3 ? '已取消' : '已释放' }
   }
 }).mount('#app')
 </script>

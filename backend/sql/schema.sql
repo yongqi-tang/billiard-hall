@@ -64,6 +64,26 @@ CREATE TABLE IF NOT EXISTS `recharge_record` (
     KEY `idx_user_id` (`user_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='资金流水表';
 
+-- 预约表
+CREATE TABLE IF NOT EXISTS `billiard_reservation` (
+    `id`           BIGINT       NOT NULL AUTO_INCREMENT COMMENT '预约ID',
+    `reservation_no` VARCHAR(32) NOT NULL COMMENT '预约单号',
+    `user_id`      BIGINT       NOT NULL COMMENT '用户ID',
+    `table_id`     BIGINT       NOT NULL COMMENT '球台ID',
+    `reserve_date` DATE         NOT NULL COMMENT '预约日期',
+    `start_time`   TIME         NOT NULL COMMENT '预约开始时间',
+    `end_time`     TIME         NOT NULL COMMENT '预约结束时间',
+    `status`       TINYINT      NOT NULL DEFAULT 0 COMMENT '状态 0待使用 1已开台 2已完成 3已取消 4超时释放',
+    `remark`       VARCHAR(255) DEFAULT NULL COMMENT '备注',
+    `create_time`  DATETIME     NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+    `deleted`      TINYINT      NOT NULL DEFAULT 0 COMMENT '逻辑删除',
+    PRIMARY KEY (`id`),
+    UNIQUE KEY `uk_reservation_no` (`reservation_no`),
+    KEY `idx_user_id` (`user_id`),
+    KEY `idx_table_id` (`table_id`),
+    KEY `idx_date_table` (`reserve_date`, `table_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='预约表';
+
 -- 灯光设备表（球台灯）
 CREATE TABLE IF NOT EXISTS `device` (
     `id`           BIGINT       NOT NULL AUTO_INCREMENT COMMENT '设备ID',

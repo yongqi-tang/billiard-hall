@@ -18,5 +18,11 @@ module.exports = {
   settleOrder: (data) => post('/api/order/settle', data),
   cancelOrder: (data) => post('/api/order/cancel', data),
   getCurrentOrder: (userId) => get(`/api/order/current?userId=${userId}`),
-  getMyOrders: (userId) => get(`/api/order/list?userId=${userId}`)
+  getMyOrders: (userId) => get(`/api/order/list?userId=${userId}`),
+
+  // 预约模块
+  createReservation: (data) => post('/api/reservation/create', data),
+  getMyReservations: (userId) => get(`/api/reservation/list?userId=${userId}`),
+  cancelReservation: (data) => post('/api/reservation/cancel', data),
+  checkinReservation: (data) => post('/api/reservation/checkin', data)
 }

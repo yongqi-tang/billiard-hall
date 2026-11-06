@@ -1,0 +1,89 @@
+.container {
+  padding-bottom: 60rpx;
+}
+
+.res-card {
+  margin: 24rpx;
+  background: #fff;
+  border-radius: 24rpx;
+  padding: 30rpx;
+  box-shadow: 0 8rpx 24rpx rgba(26, 26, 46, 0.06);
+  animation: fadeUp 0.3s ease;
+}
+
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(16rpx); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.res-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.res-table {
+  font-size: 32rpx;
+  font-weight: 700;
+}
+
+.status-badge {
+  font-size: 22rpx;
+  padding: 6rpx 20rpx;
+  border-radius: 20rpx;
+  font-weight: 500;
+}
+
+.s0 { background: #fff4d6; color: #b26a00; }
+.s1 { background: #d9f7e3; color: #07a04d; }
+.s2 { background: #e8ebf0; color: #6b7280; }
+.s3 { background: #f3f4f6; color: #9aa0ad; }
+.s4 { background: #ffdada; color: #e53030; }
+
+.res-time {
+  margin-top: 20rpx;
+  font-size: 28rpx;
+  color: #1f2430;
+  background: #f6f8fc;
+  border-radius: 14rpx;
+  padding: 18rpx 22rpx;
+  display: flex;
+  align-items: center;
+}
+
+.date-icon {
+  margin-right: 12rpx;
+}
+
+.res-no {
+  margin-top: 16rpx;
+  font-size: 22rpx;
+  color: #9aa0ad;
+}
+
+.res-remark {
+  margin-top: 8rpx;
+  font-size: 24rpx;
+  color: #6b7280;
+}
+
+.cancel-btn {
+  margin-top: 22rpx;
+  background: #fff;
+  color: #fa5151;
+  border: 2rpx solid #ffc9c9;
+  border-radius: 14rpx;
+  font-size: 26rpx;
+  padding: 14rpx 0;
+}
+
+.cancel-btn::after {
+  border: none;
+}
+
+.reserve-btn {
+  margin-top: 40rpx;
+  width: 60%;
+  padding: 22rpx 0;
+  font-size: 30rpx;
+}

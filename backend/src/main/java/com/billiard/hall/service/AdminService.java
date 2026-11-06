@@ -6,10 +6,12 @@ import com.billiard.hall.common.BusinessException;
 import com.billiard.hall.entity.BilliardOrder;
 import com.billiard.hall.entity.BilliardTable;
 import com.billiard.hall.entity.RechargeRecord;
+import com.billiard.hall.entity.Reservation;
 import com.billiard.hall.entity.User;
 import com.billiard.hall.mapper.BilliardOrderMapper;
 import com.billiard.hall.mapper.BilliardTableMapper;
 import com.billiard.hall.mapper.RechargeRecordMapper;
+import com.billiard.hall.mapper.ReservationMapper;
 import com.billiard.hall.mapper.UserMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -36,6 +38,7 @@ public class AdminService {
     private final BilliardTableMapper tableMapper;
     private final BilliardOrderMapper orderMapper;
     private final RechargeRecordMapper rechargeRecordMapper;
+    private final ReservationMapper reservationMapper;
 
     /** 管理员账号密码（application.yml 可配） */
     @Value("${billiard.admin.username:admin}")
@@ -119,6 +122,8 @@ public class AdminService {
         data.put("totalRecharge", totalRecharge);
         data.put("totalUsers", userMapper.selectCount(null));
         data.put("totalTables", tableMapper.selectCount(null));
+        data.put("pendingReservations", reservationMapper.selectCount(
+                new LambdaQueryWrapper<Reservation>().eq(Reservation::getStatus, 0)));
         return data;
     }
 

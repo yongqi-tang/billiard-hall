@@ -19,6 +19,14 @@
 
   <!-- 功能列表 -->
   <view class="menu card">
+    <view class="menu-item" bindtap="goReservations">
+      <text>📅 我的预约</text>
+      <text class="arrow">›</text>
+    </view>
+    <view class="menu-item" bindtap="goReserve">
+      <text>🗓️ 在线预约球台</text>
+      <text class="arrow">›</text>
+    </view>
     <view class="menu-item" bindtap="goPlaying">
       <text>🎱 进行中的球局</text>
       <text class="arrow">›</text>

@@ -1,39 +1,64 @@
 <view class="container">
   <!-- 顶部品牌区 -->
   <view class="header">
-    <view class="title">🎱 自主台球厅</view>
-    <view class="subtitle">扫码开台 · 自助计时 · 自动结账</view>
+    <view class="header-glow"></view>
+    <view class="header-row">
+      <view>
+        <view class="title">🎱 台球厅预约</view>
+        <view class="subtitle">在线预约 · 扫码开台 · 自助计时</view>
+      </view>
+      <view class="badge" wx:if="{{hasActiveOrder}}" bindtap="goScan">
+        <view class="badge-dot"></view>
+        进行中
+      </view>
+    </view>
   </view>
 
-  <!-- 扫码开台入口 -->
-  <view class="scan-entry" bindtap="goScan">
-    <view class="scan-icon">📷</view>
-    <view class="scan-text">
-      <view class="scan-title">扫码开台</view>
-      <view class="scan-desc">扫描球台上的二维码开始计时</view>
+  <!-- 操作入口 -->
+  <view class="entry-row">
+    <view class="entry-card scan" bindtap="goScan">
+      <view class="entry-icon">📷</view>
+      <view class="entry-title">扫码开台</view>
+      <view class="entry-desc">扫描球台二维码</view>
     </view>
-    <view class="scan-arrow">›</view>
+    <view class="entry-card reserve" bindtap="goReserve">
+      <view class="entry-icon">📅</view>
+      <view class="entry-title">在线预约</view>
+      <view class="entry-desc">提前锁定球台</view>
+    </view>
   </view>
 
   <!-- 球台列表 -->
-  <view class="section-title">球台状态</view>
+  <view class="section-title">
+    <text>🎯 球台状态</text>
+    <text class="section-hint">点击空闲球台可预约</text>
+  </view>
   <view class="table-grid">
     <view
-      class="table-card {{item.status === 0 ? 'free' : item.status === 1 ? 'busy' : 'other'}}"
+      class="table-card {{item.statusCls}}"
       wx:for="{{tables}}"
       wx:key="id"
+      data-id="{{item.id}}"
+      bindtap="onTableTap"
     >
-      <view class="table-name">{{item.name}}</view>
-      <view class="table-price">¥{{item.priceStart}} 起步</view>
-      <view class="table-status">
-        <text class="dot"></text>
-        {{item.status === 0 ? '空闲' : item.status === 1 ? '使用中' : item.status === 2 ? '维修' : '已预约'}}
+      <view class="table-top">
+        <view class="table-name">{{item.name}}</view>
+        <view class="table-tag" wx:if="{{item.reservedTag}}">{{item.reservedTag}}</view>
+      </view>
+      <view class="table-price">¥{{item.priceStart}} 起步 · {{item.priceHour}}/时</view>
+      <view class="table-bottom">
+        <view class="table-status {{item.statusCls}}">
+          <text class="dot"></text>
+          {{item.statusText}}
+        </view>
+        <view class="table-arrow" wx:if="{{item.free}}">预约 ›</view>
       </view>
     </view>
   </view>
 
   <!-- 空态 -->
   <view class="empty" wx:if="{{!tables.length && !loading}}">
-    暂无球台数据，请确认后端已启动
+    <view class="empty-icon">🎱</view>
+    <view class="empty-text">暂无球台数据，请确认后端已启动</view>
   </view>
 </view>
